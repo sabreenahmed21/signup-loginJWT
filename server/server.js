@@ -8,8 +8,8 @@ import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import userRouter from "./Routes/UserRouter.js";
 import globalError from "./Controllers/ErrorController.js";
-//import { deleteUnverifiedAccounts } from './Controllers/AuthController.js';
-//import cron from 'node-cron';
+import { deleteUnverifiedAccounts } from './Controllers/AuthController.js';
+import cron from 'node-cron';
 
 dotenv.config();
 const app = express();
@@ -31,7 +31,17 @@ app.use("/api", userRouter);
 /*ERROR */
 app.all("*", (req, res, next) => {
   const err = new Error(`Not Found ${req.originalUrl} on this server`);
-  res.status(404).json({ status: "error", error: err });
+  err.statusCode = 404;
+  const errorResponse = {
+    status: "error",
+    error: {
+      statusCode: err.statusCode,
+      message: err.message,
+      path: req.originalUrl,
+      method: req.method,
+    },
+  };
+  res.status(404).json(errorResponse);
 });
 app.use(globalError);
 
@@ -40,15 +50,14 @@ mongoose
   .connect(db)
   .then(() => {
     console.log("Connected to Mongoose database ");
-    // cron.schedule('*/5 * * * *', async () => {
-    //   await deleteUnverifiedAccounts();
-    // });
+    cron.schedule('*/5 * * * *', async () => {
+      await deleteUnverifiedAccounts();
+    });
   })
   .catch((err) => {
     console.error("Mongoose connection error:", err);
   });
-
-//deleteUnverifiedAccounts();
+deleteUnverifiedAccounts();
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

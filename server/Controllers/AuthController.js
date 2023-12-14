@@ -286,23 +286,23 @@ export const verifyCode = asyncWrapper(async (req, res, next) => {
   });
 });
 
-// export const deleteUnverifiedAccounts = async () => {
-//   try {
-//     const verificationCodeExpirationTime = 5 * 60 * 1000;
-//     const currentTime = new Date().getTime();
-//     const unverifiedAccounts = await Usermodel.find({
-//       verified: false,
-//       createdAt: {
-//         $lt: new Date(currentTime - verificationCodeExpirationTime),
-//       },
-//     });
-//     for (const account of unverifiedAccounts) {
-//       await Usermodel.deleteOne({ _id: account._id });
-//     }
-//   } catch (error) {
-//     console.error(
-//       "An error occurred while deleting unverified accounts:",
-//       error.message
-//     );
-//   }
-// };
+export const deleteUnverifiedAccounts = async () => {
+  try {
+    const verificationCodeExpirationTime = 5 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    const unverifiedAccounts = await Usermodel.find({
+      verified: false,
+      createdAt: {
+        $lt: new Date(currentTime - verificationCodeExpirationTime),
+      },
+    });
+    for (const account of unverifiedAccounts) {
+      await Usermodel.deleteOne({ _id: account._id });
+    }
+  } catch (error) {
+    console.error(
+      "An error occurred while deleting unverified accounts:",
+      error.message
+    );
+  }
+};
