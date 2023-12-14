@@ -57,7 +57,7 @@ The private route can only be accessed by logged-in users.
 
 1. Clone the repo
    ```sh
-   https://github.com/sabreenahmed21/register-loginJWT.git
+   https://github.com/sabreenahmed21/signup-loginJWT.git
    ```
 2. install:
    ```sh
