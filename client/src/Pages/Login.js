@@ -15,6 +15,7 @@ import {
 } from "../Redux/UserSlice.js";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Login() {
   const {
@@ -40,12 +41,11 @@ export default function Login() {
   const onSubmit = async (formData) => {
     dispatch(signInStart());
     try {
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
-        method: "POST",
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/login`, formData, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        credentials: 'include',
       });
       const data = await res.json();
       console.log(data);
