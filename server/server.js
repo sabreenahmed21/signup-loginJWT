@@ -31,7 +31,6 @@ app.use("/api", userRouter);
 /*ERROR */
 app.all("*", (req, res, next) => {
   const err = new Error(`Not Found ${req.originalUrl} on this server`);
-  err.statusCode = 404;
   res.status(404).json({ status: "error", error: err });
 });
 app.use(globalError);
