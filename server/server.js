@@ -8,8 +8,8 @@ import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import userRouter from "./Routes/UserRouter.js";
 import globalError from "./Controllers/ErrorController.js";
-import { deleteUnverifiedAccounts } from './Controllers/AuthController.js';
-import cron from 'node-cron';
+//import { deleteUnverifiedAccounts } from './Controllers/AuthController.js';
+//import cron from 'node-cron';
 
 dotenv.config();
 const app = express();
@@ -40,15 +40,15 @@ mongoose
   .connect(db)
   .then(() => {
     console.log("Connected to Mongoose database ");
-    cron.schedule('*/5 * * * *', async () => {
-      await deleteUnverifiedAccounts();
-    });
+    // cron.schedule('*/5 * * * *', async () => {
+    //   await deleteUnverifiedAccounts();
+    // });
   })
   .catch((err) => {
     console.error("Mongoose connection error:", err);
   });
 
-deleteUnverifiedAccounts();
+//deleteUnverifiedAccounts();
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
