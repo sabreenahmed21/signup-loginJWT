@@ -22,6 +22,9 @@ app.use(ExpressMongoSanitize());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
+app.use(express.static("public"));
+
+
 /*ROUTES*/
 app.use("/api", userRouter);
 
@@ -29,7 +32,7 @@ app.use("/api", userRouter);
 app.all("*", (req, res, next) => {
   const err = new Error(`Not Found ${req.originalUrl} on this server`);
   err.statusCode = 404;
-  next(err);
+  res.status(404).json({ status: "error", error: err });
 });
 app.use(globalError);
 
@@ -41,7 +44,11 @@ mongoose
     cron.schedule('*/5 * * * *', async () => {
       await deleteUnverifiedAccounts();
     });
+  })
+  .catch((err) => {
+    console.error("Mongoose connection error:", err);
   });
+
 deleteUnverifiedAccounts();
 
 const port = process.env.PORT || 4000;
