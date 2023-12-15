@@ -44,6 +44,7 @@ app.all("*", (req, res, next) => {
       message: err.message,
       path: req.originalUrl,
       method: req.method,
+      err: err
     },
   };
   res.status(404).json(errorResponse);

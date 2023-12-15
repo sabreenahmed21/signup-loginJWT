@@ -43,12 +43,12 @@ export default function Login() {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}/api/login`,
         {
-          method: "POST",
+          method: "POST",  
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-          withCredentials: true 
+          credentials: "include",  
         }
       );
       const data = await response.json();
