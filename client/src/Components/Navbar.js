@@ -21,6 +21,7 @@ function Navbar() {
   const dispatch = useDispatch();
   const handlelogout = () => {
     dispatch(logout());
+    navigate('/')
   };
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);

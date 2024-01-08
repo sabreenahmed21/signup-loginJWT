@@ -37,18 +37,27 @@ export default function Login() {
     navigate("/home");
     return null;
   }
+
+  const clearEmailError = () => {
+    setEmailError("");
+  };
+
+  const clearPasswordError = () => {
+    setPasswordError("");
+  };
+
   const onSubmit = async (formData) => {
     dispatch(signInStart());
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}/api/login`,
         {
-          method: "POST",  
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-          credentials: "include",  
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -62,18 +71,19 @@ export default function Login() {
           setEmailError(
             "Email not found. Please check your email and try again."
           );
-        } else if (data.message === "Incorrect password") {
-          setPasswordError("Incorrect password");
         } else if (data.message === "User not verified") {
           setEmailError(
             "Email not verified. Please verify your email and try again."
           );
+        } else if (data.message === "Incorrect password") {
+          setPasswordError("Incorrect password");
         }
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
   return (
     <Container maxWidth="sm">
       <Box pt="50px" pb="50px">
@@ -89,12 +99,12 @@ export default function Login() {
                 required: { value: true, message: "Email is required" },
               })}
               error={Boolean(errors.email || emailError)}
+              onInput={clearEmailError}
             />
             <Typography color="error" sx={{ fontSize: "0.9rem" }}>
               {errors.email?.message || emailError}
             </Typography>
           </Box>
-
           <Box mb="20px">
             <label>Password</label>
             <TextField
@@ -106,12 +116,12 @@ export default function Login() {
                 required: { value: true, message: "Password is required" },
               })}
               error={Boolean(errors.password || passwordError)}
+              onInput={clearPasswordError}
             />
             <Typography color="error" sx={{ fontSize: "0.9rem" }}>
               {errors.password?.message || passwordError}
             </Typography>
           </Box>
-
           <Button
             variant="contained"
             size="medium"
