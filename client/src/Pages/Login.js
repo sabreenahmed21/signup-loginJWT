@@ -21,7 +21,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onBlur" });
   const { currentUser } = useSelector((state) => state.user);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -52,6 +52,7 @@ export default function Login() {
         }
       );
       const data = await response.json();
+      console.log(data);
       if (data.state === "success") {
         dispatch(signInSuccess(data));
         navigate("/home");
