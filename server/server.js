@@ -48,7 +48,7 @@ app.all("*", (req, res, next) => {
   };
   res.status(404).json(errorResponse);
 });
-//app.use(globalError);
+app.use(globalError);
 
 const db = process.env.BASE_URL.replace("<password>", process.env.PASSWORD_URL);
 mongoose
