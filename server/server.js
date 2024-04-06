@@ -52,17 +52,19 @@ app.use(globalError);
 
 const db = process.env.BASE_URL.replace("<password>", process.env.PASSWORD_URL);
 mongoose
+  .set('strictQuery', false)
   .connect(db)
   .then(() => {
     console.log("Connected to Mongoose database ");
-    cron.schedule('*/5 * * * *', async () => {
-      await deleteUnverifiedAccounts();
-    });
+    // cron.schedule('*/5 * * * *', async () => {
+    //   await deleteUnverifiedAccounts();
+    // });
   })
   .catch((err) => {
     console.error("Mongoose connection error:", err);
+    process.exit();
   });
-deleteUnverifiedAccounts();
+//deleteUnverifiedAccounts();
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
